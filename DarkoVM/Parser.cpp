@@ -5,7 +5,7 @@
 #include <sstream>
 #include <iostream> // debugging
 
-Parser::Parser(std::filesystem::path path) {
+Parser::Parser(const std::filesystem::path path) {
 	this->filePath = path;
 	this->fileName = filePath.filename().string();
 	current = -1;
@@ -35,6 +35,10 @@ Parser::type Parser::commandType() {
 	}
 
 	return Parser::type::C_ARITHMETIC;
+}
+
+Parser::operation Parser::calculationType() {
+	return operationMap[currentCommand.at(0)];
 }
 
 std::string Parser::arg1() {
@@ -114,4 +118,16 @@ std::unordered_map<std::string, Parser::type> Parser::commandMap = {
 	{"function", Parser::type::C_FUNCTION},
 	{"call", Parser::type::C_CALL},
 	{"return", Parser::type::C_RETURN}
+};
+
+std::unordered_map<std::string, Parser::operation> Parser::operationMap = {
+	{"add", Parser::operation::O_ADD},
+	{"sub", Parser::operation::O_SUB},
+	{"neg", Parser::operation::O_NEG},
+	{"eq", Parser::operation::O_EQ},
+	{"gt", Parser::operation::O_GT},
+	{"lt", Parser::operation::O_LT},
+	{"and", Parser::operation::O_AND},
+	{"or", Parser::operation::O_OR},
+	{"not", Parser::operation::O_NOT}
 };
