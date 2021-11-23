@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <regex>
+#include <sstream>
 #include <iostream> // debugging
 
 Parser::Parser(std::filesystem::path path) {
@@ -9,6 +10,7 @@ Parser::Parser(std::filesystem::path path) {
 	this->fileName = filePath.filename().string();
 	current = -1;
 	this->commands;
+	this->currentCommand.reserve(3);
 
 	size_t index = fileName.find_last_of('.');
 	fileName = fileName.substr(0, index);
@@ -17,18 +19,30 @@ Parser::Parser(std::filesystem::path path) {
 }
 
 bool Parser::hasMoreCommands() {
-	return false;
+	return (current + 1) < commands.size();
 }
 
 void Parser::advance() {
+	current++;
+	splitCommand();
+}
+
+Parser::type Parser::commandType() {
+	std::string command = currentCommand.at(0);
+
+	if (commandMap.contains(command)) {
+		return commandMap[command];
+	}
+
+	return Parser::type::C_ARITHMETIC;
 }
 
 std::string Parser::arg1() {
-	return std::string();
+	return currentCommand.at(1);
 }
 
 std::string Parser::arg2() {
-	return std::string();
+	return currentCommand.at(2);
 }
 
 void Parser::readFile() {
@@ -64,10 +78,40 @@ std::string Parser::cleanString(std::string text) {
 
 std::string Parser::trimString(std::string text) {
 	// remove leading and trailing spaces
-	std::regex pattern(R"(^\s+|\s+$)"); 
+	std::regex pattern(R"(^\s+|\s+$)");
 	text = std::regex_replace(text, pattern, "");
 
 	// remove double spaces
 	pattern = R"(\s+)";
 	return std::regex_replace(text, pattern, " ");
 }
+
+void Parser::splitCommand() {
+	std::string command = commands.at(current);
+
+	std::stringstream split(command);
+	std::string item;
+
+	for (int i = 0; i < 3; i++) {
+		if (std::getline(split, item, ' ')) {
+			currentCommand.at(i) = item;
+		}
+		else {
+			currentCommand.at(i) = std::string();
+		}
+	}
+}
+
+std::unordered_map<std::string, Parser::type> Parser::commandMap = {
+	// if the command isn't found, we'll return C_ARITHMETIC
+	{"push", Parser::type::C_PUSH},
+	{"pop", Parser::type::C_POP},
+
+	{"label", Parser::type::C_LABEL},
+	{"goto", Parser::type::C_GOTO},
+	{"if-goto", Parser::type::C_IF},
+
+	{"function", Parser::type::C_FUNCTION},
+	{"call", Parser::type::C_CALL},
+	{"return", Parser::type::C_RETURN}
+};

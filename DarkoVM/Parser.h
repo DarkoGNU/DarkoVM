@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 class Parser {
 	std::filesystem::path filePath;
@@ -10,6 +11,7 @@ class Parser {
 
 	int current;
 	std::vector<std::string> commands;
+	std::vector<std::string> currentCommand;
 
 public:
 	// Instruction types
@@ -21,13 +23,16 @@ public:
 	// Handling commands
 	bool hasMoreCommands();
 	void advance();
+	Parser::type commandType();
 
 	// Arguments
 	std::string arg1();
 	std::string arg2();
 
 private:
+	static std::unordered_map<std::string, Parser::type> commandMap;
 	void readFile();
 	std::string cleanString(std::string text);
 	std::string trimString(std::string text);
+	void splitCommand();
 };
