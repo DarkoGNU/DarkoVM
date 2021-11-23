@@ -1,0 +1,5 @@
+C:/Users/zyzan/Dev/Nand2Tetris/DarkoVM/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/zyzan/Dev/Nand2Tetris/DarkoVM/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/zyzan/Dev/Nand2Tetris/DarkoVM/out/build/x64-Debug/DarkoVM/CMakeFiles/DarkoVM.dir
+C:/Users/zyzan/Dev/Nand2Tetris/DarkoVM/out/build/x64-Debug/DarkoVM/CMakeFiles/edit_cache.dir
+C:/Users/zyzan/Dev/Nand2Tetris/DarkoVM/out/build/x64-Debug/DarkoVM/CMakeFiles/rebuild_cache.dir
