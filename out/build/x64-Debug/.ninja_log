@@ -1,9 +1,0 @@
-# ninja log v5
-9	87	6593971728568334	DarkoVM/CMakeFiles/DarkoVM.dir/Code.cpp.obj	f8c1ca7f6b8df08
-5	91	6593971728568334	DarkoVM/CMakeFiles/DarkoVM.dir/Parser.cpp.obj	2dc968acf6e40794
-1	607	6593971733748292	DarkoVM/CMakeFiles/DarkoVM.dir/DarkoVM.cpp.obj	ae4e496c96aefbfb
-607	1015	6593971737678305	DarkoVM/DarkoVM.exe	6af3c26488a9aaaa
-1	3139	6593987303057738	DarkoVM/CMakeFiles/DarkoVM.dir/DarkoVM.cpp.obj	c1ac07001ea606cb
-5	3226	6593987303877764	DarkoVM/CMakeFiles/DarkoVM.dir/Parser.cpp.obj	d59a6e641d0dd9ab
-10	3242	6593987304127723	DarkoVM/CMakeFiles/DarkoVM.dir/Code.cpp.obj	e0490841debb39c6
-3242	3507	6593987306187739	DarkoVM/DarkoVM.exe	6af3c26488a9aaaa
