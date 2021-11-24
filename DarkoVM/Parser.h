@@ -20,6 +20,7 @@ public:
 	enum class operation { O_ADD, O_SUB, O_NEG, O_EQ, O_GT, O_LT, O_AND, O_OR, O_NOT };
 
 	// Constructor
+	Parser();
 	Parser(const std::filesystem::path path);
 
 	// Handling commands
@@ -31,6 +32,9 @@ public:
 	// Arguments
 	std::string arg1();
 	std::string arg2();
+
+	// File name
+	std::string getFileName();
 
 private:
 	static std::unordered_map<std::string, Parser::type> commandMap;

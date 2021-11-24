@@ -3,11 +3,11 @@
 #include <fstream>
 #include <regex>
 #include <sstream>
-#include <iostream> // debugging
+#include <stdexcept>
 
 Parser::Parser(const std::filesystem::path path) {
 	this->filePath = path;
-	this->fileName = filePath.filename().string();
+	this->fileName = filePath.filename().stem().string();
 	current = -1;
 	this->commands;
 	this->currentCommand.reserve(3);
@@ -17,6 +17,9 @@ Parser::Parser(const std::filesystem::path path) {
 
 	this->readFile();
 }
+
+// Default constructor
+Parser::Parser() {}
 
 bool Parser::hasMoreCommands() {
 	return (current + 1) < commands.size();
@@ -49,15 +52,20 @@ std::string Parser::arg2() {
 	return currentCommand.at(2);
 }
 
+std::string Parser::getFileName() {
+	return fileName;
+}
+
 void Parser::readFile() {
 	std::ifstream textFile(filePath);
-
-	if (textFile.bad()) {
-		return;
-	}
-
 	std::string line;
+
 	while (std::getline(textFile, line)) {
+		if (textFile.bad()) {
+			throw std::runtime_error("I/O Error");
+			return;
+		}
+
 		line = cleanString(line);
 
 		if (line.empty()) {
@@ -65,7 +73,6 @@ void Parser::readFile() {
 		}
 
 		commands.push_back(line);
-		std::cout << line << "\n";
 	}
 }
 

@@ -1,16 +1,19 @@
 #include "Code.h"
 
 Code::Code(std::filesystem::path path) {
+	this->filePath = path;
 }
 
-void Code::setFileName(std::string name) {
+void Code::setParser(Parser newParser) {
+	this->parser = newParser;
+	this->fileName = parser.getFileName();
 }
 
-void Code::writeArithmetic(std::string command) {
+void Code::translate() {
 }
 
-void Code::writePushPop(std::string command) {
+void Code::writeArithmetic() {
 }
 
-void Code::close() {
+void Code::writePushPop() {
 }

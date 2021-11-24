@@ -3,20 +3,25 @@
 #include <filesystem>
 #include <string>
 
+#include "Parser.h"
+
 class Code {
+	std::filesystem::path filePath;
+	std::string fileName;
+	Parser parser;
+
 public:
 	// Constructor
 	Code(std::filesystem::path path);
 
-	// Currently translated file's name
-	void setFileName(std::string name);
+	// Set current parser
+	void setParser(Parser newParser);
 
-	// Translate and write an arithmetic command
-	void writeArithmetic(std::string command);
+	// Translate and write the result
+	void translate();
 
-	// Translate and write a push/pop command
-	void writePushPop(std::string command);
 
-	// Close the output file
-	void close();
+private:
+	void writeArithmetic();
+	void writePushPop();
 };
