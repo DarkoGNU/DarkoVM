@@ -8,8 +8,9 @@
 int main(int argc, char* argv[]) {
 	// Initialize some variables
 	std::string vmFile(argv[1]);
-
 	std::filesystem::path vmPath(vmFile);
+
+	std::string asmFile;
 	std::filesystem::path asmPath;
 
 	std::vector<std::filesystem::path> inFiles;
@@ -31,9 +32,23 @@ int main(int argc, char* argv[]) {
 
 	// Determine the out file's path
 	if (std::filesystem::is_directory(vmPath)) {
-		std::string asmFile = vmPath.filename().string().append(".asm");
+		asmFile = vmPath.filename().string().append(".asm");
 	}
 	else {
-		inFiles.push_back(vmPath);
+		asmFile = vmPath.stem().string().append(".asm");
 	}
+
+	asmPath = std::filesystem::path(asmFile);
+	Code codeWriter(asmPath);
+
+	// Translate all input files
+	for (auto const& entry : inFiles) {
+		std::cout << "Translating " << entry.string() << "...\n";
+
+		Parser parser(entry);
+		codeWriter.setParser(parser);
+		codeWriter.translate();
+	}
+
+	std::cout << "\nTranslation complete!\n";
 }
