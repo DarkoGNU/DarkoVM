@@ -10,10 +10,33 @@ void Code::setParser(Parser newParser) {
 }
 
 void Code::translate() {
+	while (parser.hasMoreCommands()) {
+		parser.advance();
+
+		if (parser.commandType() == Parser::type::C_ARITHMETIC) {
+			this->writeArithmetic();
+		}
+		else {
+			this->writePushPop();
+		}
+	}
 }
 
 void Code::writeArithmetic() {
 }
 
 void Code::writePushPop() {
+	if (parser.commandType() == Parser::type::C_PUSH) {
+		this->writePush();
+	}
+	else {
+		this->writePop();
+	}
+}
+
+void Code::writePush() {
+	if
+}
+
+void Code::writePop() {
 }

@@ -26,6 +26,8 @@ public:
 	// Handling commands
 	bool hasMoreCommands();
 	void advance();
+
+	// Command types
 	Parser::type commandType();
 	Parser::operation calculationType();
 

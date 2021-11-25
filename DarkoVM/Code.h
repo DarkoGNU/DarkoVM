@@ -20,8 +20,11 @@ public:
 	// Translate and write the result
 	void translate();
 
-
 private:
 	void writeArithmetic();
+
+	// Push'n'pop
 	void writePushPop();
+	void writePush();
+	void writePop();
 };
