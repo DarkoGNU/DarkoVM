@@ -20,6 +20,16 @@ bool AssemblyMap::initialize(std::string folder) {
 		std::stringstream content;
 
 		content << file.rdbuf();
-		dataMap[entry.filename().stem().string()] =  content.str();
+		dataMap[entry.filename().stem().string()] = content.str();
+
+		if (file.bad()) {
+			return false;
+		}
 	}
+
+	return true;
+}
+
+std::string AssemblyMap::getAsm(std::string command) {
+	return dataMap[command];
 }

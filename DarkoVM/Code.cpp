@@ -1,8 +1,13 @@
 #include "Code.h"
 
-Code::Code(std::filesystem::path path) {
+#include <format>
+
+Code::Code(std::filesystem::path path, AssemblyMap asmMap) {
 	this->filePath = path;
 	file = std::ofstream(path);
+
+	this->asmMap = asmMap;
+
 	line = -1;
 }
 
@@ -64,32 +69,15 @@ void Code::writeArithmetic() {
 }
 
 void Code::handleAdd() {
-	file << "@" << "SP" << "\n"; // acquire the first address, decrement the stack pointer
-	file << "AM=M-1" << "\n";
-
-	file << "D=M" << "\n"; // acquire the first variable
-
-	file << "@" << "SP" << "\n"; // acquire the second address
-	file << "A=M-1" << "\n";
-	file << "M=M+D" << "\n"; // add
+	file << asmMap.getAsm("add");
 }
 
 void Code::handleSub() {
-	file << "@" << "SP" << "\n"; // acquire the first address, decrement the stack pointer
-	file << "AM=M-1" << "\n";
-
-	file << "D=M" << "\n"; // acquire the first variable
-
-	file << "@" << "SP" << "\n"; // acquire the second address
-	file << "A=M-1" << "\n";
-
-	file << "M=M-D" << "\n"; // subtract
+	file << asmMap.getAsm("sub");
 }
 
 void Code::handleNeg() {
-	file << "@" << "SP" << "\n"; // acquire the address
-	file << "A=M-1" << "\n";
-	file << "M=-M" << "\n"; // negate its value
+	file << asmMap.getAsm("neg");
 }
 
 void Code::handleEq() {
@@ -97,37 +85,7 @@ void Code::handleEq() {
 	std::string equal = "EQUAL" + std::to_string(line);
 	std::string end = "END" + std::to_string(line);
 
-	file << "@" << "SP" << "\n"; // acquire the first address, decrement the stack pointer
-	file << "AM=M-1" << "\n";
-
-	file << "D=M" << "\n"; // acquire the first variable
-
-	file << "@" << "SP" << "\n"; // acquire the second address
-	file << "A=M-1" << "\n";
-
-	file << "D=M-D" << "\n"; // compute their value
-
-	file << "@" << notEqual << "\n";
-	file << "D;JNE" << "\n"; // jump if they're not equal
-	file << "@" << equal << "\n";
-	file << "0;JMP" << "\n"; // else, jump to another line
-
-	file << "(" << notEqual << ")" << "\n"; // not equal
-	file << "@" << "SP" << "\n"; // acquire the address
-	file << "A=M-1" << "\n"; // correct it
-	file << "M=0" << "\n"; // write false
-	file << "@" << end << "\n"; // jump to the end
-	file << "0;JMP" << "\n";
-
-	file << "(" << equal << ")" << "\n"; // equal
-	file << "@" << "SP" << "\n"; // acquire the address
-	file << "A=M-1" << "\n"; // correct it
-	file << "M=-1" << "\n"; // write true
-	file << "@" << end << "\n"; // jump to the end
-	file << "0;JMP" << "\n";
-
-	// the end
-	file << "(" << end << ")" << "\n";
+	file << std::format(asmMap.getAsm("eq"), notEqual, equal, end);
 }
 
 void Code::handleGt() {
@@ -135,37 +93,7 @@ void Code::handleGt() {
 	std::string greater = "GREATER" + std::to_string(line);
 	std::string end = "END" + std::to_string(line);
 
-	file << "@" << "SP" << "\n"; // acquire the first address, decrement the stack pointer
-	file << "AM=M-1" << "\n";
-
-	file << "D=M" << "\n"; // acquire the first variable
-
-	file << "@" << "SP" << "\n"; // acquire the second address
-	file << "A=M-1" << "\n";
-
-	file << "D=M-D" << "\n"; // compute their value
-
-	file << "@" << notGreater << "\n";
-	file << "D;JLE" << "\n"; // jump if it's not greater
-	file << "@" << greater << "\n";
-	file << "0;JMP" << "\n"; // else, jump to another line
-
-	file << "(" << notGreater << ")" << "\n"; // not greater
-	file << "@" << "SP" << "\n"; // acquire the address
-	file << "A=M-1" << "\n"; // correct it
-	file << "M=0" << "\n"; // write false
-	file << "@" << end << "\n"; // jump to the end
-	file << "0;JMP" << "\n";
-
-	file << "(" << greater << ")" << "\n"; // greater
-	file << "@" << "SP" << "\n"; // acquire the address
-	file << "A=M-1" << "\n"; // correct it
-	file << "M=-1" << "\n"; // write true
-	file << "@" << end << "\n"; // jump to the end
-	file << "0;JMP" << "\n";
-
-	// the end
-	file << "(" << end << ")" << "\n";
+	file << std::format(asmMap.getAsm("gt"), notGreater, greater, end);
 }
 
 void Code::handleLt() {
@@ -173,65 +101,19 @@ void Code::handleLt() {
 	std::string smaller = "SMALLER" + std::to_string(line);
 	std::string end = "END" + std::to_string(line);
 
-	file << "@" << "SP" << "\n"; // acquire the first address, decrement the stack pointer
-	file << "AM=M-1" << "\n";
-
-	file << "D=M" << "\n"; // acquire the first variable
-
-	file << "@" << "SP" << "\n"; // acquire the second address
-	file << "A=M-1" << "\n";
-
-	file << "D=M-D" << "\n"; // compute their value
-
-	file << "@" << notSmaller << "\n";
-	file << "D;JGE" << "\n"; // jump if it's not smaller
-	file << "@" << smaller << "\n";
-	file << "0;JMP" << "\n"; // else, jump to another line
-
-	file << "(" << notSmaller << ")" << "\n"; // not greater
-	file << "@" << "SP" << "\n"; // acquire the address
-	file << "A=M-1" << "\n"; // correct it
-	file << "M=0" << "\n"; // write false
-	file << "@" << end << "\n"; // jump to the end
-	file << "0;JMP" << "\n";
-
-	file << "(" << smaller << ")" << "\n"; // greater
-	file << "@" << "SP" << "\n"; // acquire the address
-	file << "A=M-1" << "\n"; // correct it
-	file << "M=-1" << "\n"; // write true
-	file << "@" << end << "\n"; // jump to the end
-	file << "0;JMP" << "\n";
-
-	// the end
-	file << "(" << end << ")" << "\n";
+	file << std::format(asmMap.getAsm("lt"), notSmaller, smaller, end);
 }
 
 void Code::handleAnd() {
-	file << "@" << "SP" << "\n"; // acquire the first address, decrement the stack pointer
-	file << "AM=M-1" << "\n";
-
-	file << "D=M" << "\n"; // acquire the first variable
-
-	file << "@" << "SP" << "\n"; // acquire the second address
-	file << "A=M-1" << "\n";
-	file << "M=D&M" << "\n"; // and
+	file << asmMap.getAsm("and");
 }
 
 void Code::handleOr() {
-	file << "@" << "SP" << "\n"; // acquire the first address, decrement the stack pointer
-	file << "AM=M-1" << "\n";
-
-	file << "D=M" << "\n"; // acquire the first variable
-
-	file << "@" << "SP" << "\n"; // acquire the second address
-	file << "A=M-1" << "\n";
-	file << "M=D|M" << "\n"; // or
+	file << asmMap.getAsm("or");
 }
 
 void Code::handleNot() {
-	file << "@" << "SP" << "\n"; // acquire the address
-	file << "A=M-1" << "\n";
-	file << "M=!M" << "\n"; // not
+	file << asmMap.getAsm("not");
 }
 
 void Code::writePushPop() {
@@ -257,14 +139,7 @@ void Code::writePop() {
 }
 
 void Code::writePushConstant() {
-	file << "@" << parser.arg2() << "\n"; // acquire the constant
-	file << "D=A" << "\n";
-
-	file << "@" << "SP" << "\n"; // acquire the address, increment the stack pointer, 
-	file << "AM=M+1" << "\n";
-	file << "A=A-1" << "\n"; // correct the address
-
-	file << "M=D" << "\n"; // push the constant
+	file << std::format(asmMap.getAsm("push_constant"), parser.arg2());
 }
 
 void Code::close() {

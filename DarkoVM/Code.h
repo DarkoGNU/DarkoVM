@@ -5,17 +5,21 @@
 #include <string>
 
 #include "Parser.h"
+#include "AssemblyMap.h"
 
 class Code {
 	std::filesystem::path filePath;
 	std::string fileName;
-	Parser parser;
 	std::ofstream file;
+
+	Parser parser;
+	AssemblyMap asmMap;
+	
 	int line;
 
 public:
 	// Constructor
-	Code(std::filesystem::path path);
+	Code(std::filesystem::path path, AssemblyMap asmMap);
 
 	// Set current parser
 	void setParser(Parser newParser);

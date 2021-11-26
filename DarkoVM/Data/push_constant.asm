@@ -1,5 +1,4 @@
-// push constant 5, line 0
-@{} // arg2
+@{0} // arg2
 D=A
 @SP
 AM=M+1

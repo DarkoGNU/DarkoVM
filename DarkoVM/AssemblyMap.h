@@ -8,4 +8,5 @@ class AssemblyMap {
 
 public:
 	bool initialize(std::string folder);
+	std::string getAsm(std::string command);
 };

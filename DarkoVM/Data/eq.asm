@@ -4,18 +4,18 @@ D=M
 @SP
 A=M-1
 D=M-D
-@{} // not equal
+@{0} // not equal
 D;JNE
-@{} // equal
+@{1} // equal
 0;JMP
-({}) // not equal
+({0}) // not equal
 @SP
 A=M-1
 M=0
-@ {} // end
+@{2} // end
 0;JMP
-({}) // equal
+({1}) // equal
 @SP
 A=M-1
 M=-1
-({}) // end
+({2}) // end

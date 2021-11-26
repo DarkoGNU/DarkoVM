@@ -4,18 +4,18 @@ D=M
 @SP
 A=M-1
 D=M-D
-@{} // not smaller
+@{0} // not smaller
 D;JGE
-@{} // smaller
+@{1} // smaller
 0;JMP
-({}) // not smaller
+({0}) // not smaller
 @SP
 A=M-1
 M=0
-@{} // end
+@{2} // end
 0;JMP
-({}) // smaller
+({1}) // smaller
 @SP
 A=M-1
 M=-1
-({}) // end
+({2}) // end

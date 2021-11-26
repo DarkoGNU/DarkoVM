@@ -39,8 +39,20 @@ int main(int argc, char* argv[]) {
 		asmFile = vmPath.stem().string().append(".asm");
 	}
 
+	// Initialize the AssemblyMap
+	AssemblyMap asmMap;
+
+	if (asmMap.initialize("Data")) {
+		std::cout << "AssemblyMap initialized successfully...\n\n";
+	}
+	else {
+		std::cout << "AssemblyMap couldn't initialize\n";
+		return 0;
+	}
+
+	// Initialize the Code writer
 	asmPath = std::filesystem::path(asmFile);
-	Code codeWriter(asmPath);
+	Code codeWriter(asmPath, asmMap);
 
 	// Translate all input files
 	for (auto const& entry : inFiles) {
