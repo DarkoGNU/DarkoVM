@@ -1,6 +1,7 @@
 #include "Code.h"
 
 #include <format>
+#include <iostream> // temp
 
 Code::Code(std::filesystem::path path, AssemblyMap asmMap) {
 	this->filePath = path;
@@ -39,13 +40,13 @@ void Code::translate() {
 void Code::writeArithmetic() {
 	switch (parser.calculationType()) {
 	case Parser::operation::O_ADD:
-		handleAdd();
+		file << asmMap.getAsm("add");
 		break;
 	case Parser::operation::O_SUB:
-		handleSub();
+		file << asmMap.getAsm("sub");
 		break;
 	case Parser::operation::O_NEG:
-		handleNeg();
+		file << asmMap.getAsm("neg");
 		break;
 	case Parser::operation::O_EQ:
 		handleEq();
@@ -57,27 +58,15 @@ void Code::writeArithmetic() {
 		handleLt();
 		break;
 	case Parser::operation::O_AND:
-		handleAnd();
+		file << asmMap.getAsm("and");
 		break;
 	case Parser::operation::O_OR:
-		handleOr();
+		file << asmMap.getAsm("or");
 		break;
 	case Parser::operation::O_NOT:
-		handleNot();
+		file << asmMap.getAsm("not");
 		break;
 	}
-}
-
-void Code::handleAdd() {
-	file << asmMap.getAsm("add");
-}
-
-void Code::handleSub() {
-	file << asmMap.getAsm("sub");
-}
-
-void Code::handleNeg() {
-	file << asmMap.getAsm("neg");
 }
 
 void Code::handleEq() {
@@ -104,18 +93,6 @@ void Code::handleLt() {
 	file << std::format(asmMap.getAsm("lt"), notSmaller, smaller, end);
 }
 
-void Code::handleAnd() {
-	file << asmMap.getAsm("and");
-}
-
-void Code::handleOr() {
-	file << asmMap.getAsm("or");
-}
-
-void Code::handleNot() {
-	file << asmMap.getAsm("not");
-}
-
 void Code::writePushPop() {
 	if (parser.commandType() == Parser::type::C_PUSH) {
 		this->writePush();
@@ -130,16 +107,40 @@ void Code::writePush() {
 
 	switch (seg) {
 	case Parser::segment::S_CONSTANT:
-		writePushConstant();
+		file << std::format(asmMap.getAsm("push_constant"), parser.arg2());
+		break;
+	case Parser::segment::S_LOCAL:
+		file << std::format(asmMap.getAsm("push_local"), parser.arg2());
+		break;
+	case Parser::segment::S_ARGUMENT:
+		file << std::format(asmMap.getAsm("push_argument"), parser.arg2());
+		break;
+	case Parser::segment::S_THIS:
+		file << std::format(asmMap.getAsm("push_this"), parser.arg2());
+		break;
+	case Parser::segment::S_THAT:
+		file << std::format(asmMap.getAsm("push_that"), parser.arg2());
 		break;
 	}
 }
 
 void Code::writePop() {
-}
+	Parser::segment seg = parser.getSegment();
 
-void Code::writePushConstant() {
-	file << std::format(asmMap.getAsm("push_constant"), parser.arg2());
+	switch (seg) {
+	case Parser::segment::S_LOCAL:
+		file << std::format(asmMap.getAsm("pop_local"), parser.arg2());
+		break;
+	case Parser::segment::S_ARGUMENT:
+		file << std::format(asmMap.getAsm("pop_argument"), parser.arg2());
+		break;
+	case Parser::segment::S_THIS:
+		file << std::format(asmMap.getAsm("pop_this"), parser.arg2());
+		break;
+	case Parser::segment::S_THAT:
+		file << std::format(asmMap.getAsm("pop_that"), parser.arg2());
+		break;
+	}
 }
 
 void Code::close() {

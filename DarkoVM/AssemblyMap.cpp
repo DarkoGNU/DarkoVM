@@ -6,7 +6,12 @@
 bool AssemblyMap::initialize(std::string folder) {
 	std::vector<std::filesystem::path> asmFiles;
 
+	// Get all file names
 	for (auto const& entry : std::filesystem::recursive_directory_iterator(folder)) {
+		if (!entry.is_regular_file()) {
+			continue;
+		}
+
 		asmFiles.push_back(entry);
 	}
 

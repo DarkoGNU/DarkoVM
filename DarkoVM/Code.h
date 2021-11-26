@@ -31,23 +31,14 @@ private:
 	void writeArithmetic();
 
 	// Arithmetic commands
-	void handleAdd();
-	void handleSub();
-	void handleNeg();
 	void handleEq();
 	void handleGt();
 	void handleLt();
-	void handleAnd();
-	void handleOr();
-	void handleNot();
 
 	// Push'n'pop
 	void writePushPop();
 	void writePush();
 	void writePop();
-
-	// More push'n'pop
-	void writePushConstant();
 
 	// End the translation
 	void close();
