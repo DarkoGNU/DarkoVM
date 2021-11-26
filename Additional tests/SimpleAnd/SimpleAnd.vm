@@ -1,0 +1,4 @@
+// Pushes and ands two constants.
+push constant 124
+push constant 151
+and

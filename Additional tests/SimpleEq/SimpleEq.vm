@@ -1,0 +1,4 @@
+// Checks if two constants are equal
+push constant 37
+push constant 25
+eq

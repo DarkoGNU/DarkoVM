@@ -9,10 +9,8 @@ Parser::Parser(const std::filesystem::path path) {
 	this->filePath = path;
 	this->fileName = filePath.filename().stem().string();
 	current = -1;
-	this->commands;
-	this->currentCommand.reserve(3);
 
-	size_t index = fileName.find_last_of('.');
+	std::size_t index = fileName.find_last_of('.');
 	fileName = fileName.substr(0, index);
 
 	this->readFile();
@@ -25,9 +23,10 @@ bool Parser::hasMoreCommands() {
 	return (current + 1) < commands.size();
 }
 
-void Parser::advance() {
+std::string Parser::advance() {
 	current++;
 	splitCommand();
+	return commands.at(current);
 }
 
 Parser::type Parser::commandType() {
@@ -45,11 +44,19 @@ Parser::operation Parser::calculationType() {
 }
 
 std::string Parser::arg1() {
+	if (this->commandType() == Parser::type::C_ARITHMETIC) {
+		return currentCommand.at(0);
+	}
+
 	return currentCommand.at(1);
 }
 
-std::string Parser::arg2() {
-	return currentCommand.at(2);
+Parser::segment Parser::getSegment() {
+	return segmentMap[currentCommand.at(1)];
+}
+
+int Parser::arg2() {
+	return std::stoi(currentCommand.at(2));
 }
 
 std::string Parser::getFileName() {
@@ -78,7 +85,7 @@ void Parser::readFile() {
 
 std::string Parser::cleanString(std::string text) {
 	// find and erase comments
-	size_t comment = text.find("//");
+	std::size_t comment = text.find("//");
 	if (comment != std::string::npos) {
 		text.erase(comment);
 	}
@@ -99,16 +106,17 @@ std::string Parser::trimString(std::string text) {
 
 void Parser::splitCommand() {
 	std::string command = commands.at(current);
+	currentCommand.clear();
 
 	std::stringstream split(command);
 	std::string item;
 
 	for (int i = 0; i < 3; i++) {
 		if (std::getline(split, item, ' ')) {
-			currentCommand.at(i) = item;
+			currentCommand.push_back(item);
 		}
 		else {
-			currentCommand.at(i) = std::string();
+			currentCommand.push_back(std::string());
 		}
 	}
 }
@@ -137,4 +145,14 @@ std::unordered_map<std::string, Parser::operation> Parser::operationMap = {
 	{"and", Parser::operation::O_AND},
 	{"or", Parser::operation::O_OR},
 	{"not", Parser::operation::O_NOT}
+};
+
+std::unordered_map<std::string, Parser::segment> Parser::segmentMap = {
+	{"argument", Parser::segment::S_ARGUMENT},
+	{"local", Parser::segment::S_LOCAL},
+	{"static", Parser::segment::S_STATIC},
+	{"constant", Parser::segment::S_CONSTANT},
+	{"this", Parser::segment::S_THAT},
+	{"pointer", Parser::segment::S_POINTER},
+	{"temp", Parser::segment::S_TEMP}
 };

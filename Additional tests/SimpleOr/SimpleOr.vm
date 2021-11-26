@@ -1,0 +1,4 @@
+// Pushes and ors two constants.
+push constant 124
+push constant 151
+or

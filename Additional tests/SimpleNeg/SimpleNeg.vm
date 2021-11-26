@@ -1,0 +1,3 @@
+// Negates a constant
+push constant 157
+neg

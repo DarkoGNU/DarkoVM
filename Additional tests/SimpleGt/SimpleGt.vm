@@ -1,0 +1,4 @@
+// Checks if the first constant is greater
+push constant 37
+push constant 25
+gt
