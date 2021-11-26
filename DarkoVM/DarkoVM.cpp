@@ -4,6 +4,7 @@
 
 #include "Parser.h"
 #include "Code.h"
+#include "AssemblyMap.h"
 
 int main(int argc, char* argv[]) {
 	// Initialize some variables
