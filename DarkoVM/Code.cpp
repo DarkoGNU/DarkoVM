@@ -129,6 +129,7 @@ void Code::writePop() {
 
 	switch (seg) {
 	case Parser::segment::S_LOCAL:
+		std::cout << asmMap.getAsm("pop_local");
 		file << std::format(asmMap.getAsm("pop_local"), parser.arg2());
 		break;
 	case Parser::segment::S_ARGUMENT:

@@ -152,7 +152,8 @@ std::unordered_map<std::string, Parser::segment> Parser::segmentMap = {
 	{"local", Parser::segment::S_LOCAL},
 	{"static", Parser::segment::S_STATIC},
 	{"constant", Parser::segment::S_CONSTANT},
-	{"this", Parser::segment::S_THAT},
+	{"this", Parser::segment::S_THIS},
+	{"that", Parser::segment::S_THAT},
 	{"pointer", Parser::segment::S_POINTER},
 	{"temp", Parser::segment::S_TEMP}
 };
