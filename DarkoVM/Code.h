@@ -14,7 +14,7 @@ class Code {
 
 	Parser parser;
 	AssemblyMap asmMap;
-	
+
 	int line;
 
 public:
@@ -27,19 +27,15 @@ public:
 	// Translate and write the result
 	void translate();
 
-private:
-	void writeArithmetic();
+	// End the translation
+	void close();
 
-	// Arithmetic commands
-	void handleEq();
-	void handleGt();
-	void handleLt();
+private:
+	// Addin' & subtractin'
+	void writeArithmetic();
 
 	// Push'n'pop
 	void writePushPop();
 	void writePush();
 	void writePop();
-
-	// End the translation
-	void close();
 };

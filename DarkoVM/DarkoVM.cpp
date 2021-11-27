@@ -63,5 +63,6 @@ int main(int argc, char* argv[]) {
 		codeWriter.translate();
 	}
 
+	codeWriter.close();
 	std::cout << "\nTranslation complete!\n";
 }
