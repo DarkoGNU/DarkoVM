@@ -123,6 +123,12 @@ void Code::writePush() {
 	case Parser::segment::S_TEMP:
 		file << std::format(asmMap.getAsm("push_temp"), parser.arg2() + 5);
 		break;
+	case Parser::segment::S_POINTER:
+		file << std::format(asmMap.getAsm("push_pointer"), parser.arg2() + 3);
+		break;
+	case Parser::segment::S_STATIC:
+		file << std::format(asmMap.getAsm("push_static"), fileName + "." + std::to_string(parser.arg2()));
+		break;
 	}
 }
 
@@ -144,6 +150,12 @@ void Code::writePop() {
 		break;
 	case Parser::segment::S_TEMP:
 		file << std::format(asmMap.getAsm("pop_temp"), parser.arg2() + 5);
+		break;
+	case Parser::segment::S_POINTER:
+		file << std::format(asmMap.getAsm("pop_pointer"), parser.arg2() + 3);
+		break;
+	case Parser::segment::S_STATIC:
+		file << std::format(asmMap.getAsm("pop_static"), fileName + "." + std::to_string(parser.arg2()));
 		break;
 	}
 }
