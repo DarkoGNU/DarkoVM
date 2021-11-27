@@ -1,6 +1,6 @@
+@THAT
+D=M
 @{0} // arg2
-D=A
-@that
 D=D+A
 @SP
 AM=M-1

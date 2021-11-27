@@ -1,4 +1,4 @@
-@this
+@THIS
 D=M
 @{0} // arg2
 A=D+A

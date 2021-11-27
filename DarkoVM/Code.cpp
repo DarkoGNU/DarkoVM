@@ -1,7 +1,6 @@
 #include "Code.h"
 
 #include <format>
-#include <iostream> // temp
 
 Code::Code(std::filesystem::path path, AssemblyMap asmMap) {
 	this->filePath = path;
@@ -121,6 +120,9 @@ void Code::writePush() {
 	case Parser::segment::S_THAT:
 		file << std::format(asmMap.getAsm("push_that"), parser.arg2());
 		break;
+	case Parser::segment::S_TEMP:
+		file << std::format(asmMap.getAsm("push_temp"), parser.arg2() + 5);
+		break;
 	}
 }
 
@@ -129,7 +131,6 @@ void Code::writePop() {
 
 	switch (seg) {
 	case Parser::segment::S_LOCAL:
-		std::cout << asmMap.getAsm("pop_local");
 		file << std::format(asmMap.getAsm("pop_local"), parser.arg2());
 		break;
 	case Parser::segment::S_ARGUMENT:
@@ -140,6 +141,9 @@ void Code::writePop() {
 		break;
 	case Parser::segment::S_THAT:
 		file << std::format(asmMap.getAsm("pop_that"), parser.arg2());
+		break;
+	case Parser::segment::S_TEMP:
+		file << std::format(asmMap.getAsm("pop_temp"), parser.arg2() + 5);
 		break;
 	}
 }

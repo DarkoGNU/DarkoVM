@@ -1,6 +1,6 @@
+@LCL
+D=M
 @{0} // arg2
-D=A
-@local
 D=D+A
 @SP
 AM=M-1
